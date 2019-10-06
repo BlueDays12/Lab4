@@ -93,8 +93,10 @@ public class allSortPerformances {
                     System.out.println("Not sorted.");
 
                 quickSort(testList, low, length);
+                // naiveQuickSort(testList, low, length);
                 // bubbleSortNumberList(testList);
                 // selectionSort(testList, length);
+                // mergeSort(testList, length+1);
 
                 checkSortCorrectness(testList, length);
 
@@ -151,12 +153,17 @@ public class allSortPerformances {
     }
 
     public static void selectionSort (long[] list, int N) {
+        // take the present element index and put in tmp variable
+        // if the next element is less than the present then swap that
+        // index to the tmp to be swapped
         for (int i = 0; i < N; ++i) {
             int tmp = i;
             for (int j = i + 1; j < N+1; ++j) {
                 if (list[j] < list[tmp])
                     tmp = j;
             }
+
+            // swap the smaller
             long small = list[tmp];
             list[tmp] = list[i];
             list[i] = small;
@@ -172,8 +179,14 @@ public class allSortPerformances {
         int middle = low + (high - low) / 2;
         long pivot = list[middle];
 
-        // make left < pivot and right > pivot
+        /*make left < pivot and right > pivot
+        Divide and conquer index i will check the lower
+        up to middle while index j will start at the
+        end and work down to middle */
         int i = low, j = high;
+
+        // Recursively call quickSort until index i reaches the
+        // length of the array
         while (i <= j) {
             while (list[i] < pivot) {
                 ++i;
@@ -197,7 +210,44 @@ public class allSortPerformances {
             quickSort(list, i, high);
     }
 
-    public static void naiveQuickSort (long[] list) {
+    public static void naiveQuickSort (long[] list, int low, int high) {
+        // make pivot the first item
+        if (list == null || high == 0)
+            return;
+        if (low >= high)
+            return;
+        // pick the first element as pivot
+        long pivot = list[low];
+
+        /*make left < pivot and right > pivot
+        Divide and conquer index i will check the lower
+        up to middle while index j will start at the
+        end and work down to middle */
+        int i = low, j = high;
+
+        // Recursively call quickSort until index i reaches the
+        // length of the array
+        while (i <= j) {
+            while (list[i] < pivot) {
+                ++i;
+            }
+            while (list[j] > pivot) {
+                --j;
+            }
+            if (i <= j) {
+                long temp = list[i];
+                list[i] = list[j];
+                list[j] = temp;
+                ++i;
+                --j;
+            }
+        }
+
+        // recursively sort two sub parts
+        if (low < j)
+            quickSort(list, low, j);
+        if (high > i)
+            quickSort(list, i, high);
 
     }
 
